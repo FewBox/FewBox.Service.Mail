@@ -9,6 +9,7 @@ namespace FewBox.Service.Mail.Dtos
         public IList<string> ToAddresses { get; set; }
         public IList<string> CCAddresses { get; set; }
         public IList<string> BCCAddresses { get; set; }
+        public IList<string> ReplyToAddresses { get; set; }
         public bool IsBodyHtml { get; set; }
         public string Subject { get; set; }
         public string Body { get; set; }

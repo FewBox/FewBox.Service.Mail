@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,33 +29,53 @@ namespace FewBox.Service.Mail.Controllers
             using(SmtpClient smtpClient = new SmtpClient())
             {
                 var encoding = Encoding.UTF8;
+                smtpClient.UseDefaultCredentials = false;
                 smtpClient.Host = this.SmtpConfig.Host;
                 smtpClient.Port = this.SmtpConfig.Port;
                 smtpClient.Timeout = this.SmtpConfig.Timeout;
                 smtpClient.EnableSsl = this.SmtpConfig.EnableSsl;
+                smtpClient.Credentials = new NetworkCredential{
+                    UserName = this.SmtpConfig.Username,
+                    Password = this.SmtpConfig.Password
+                };
                 
                 var mailMessage = new MailMessage();
                 mailMessage.From = new MailAddress(sendMailRequestDto.FromAddress, sendMailRequestDto.FromDisplayName, encoding);
-                foreach(string to in sendMailRequestDto.ToAddresses)
+                if(sendMailRequestDto.ToAddresses != null)
                 {
-                    mailMessage.To.Add(to);
+                    foreach(string to in sendMailRequestDto.ToAddresses)
+                    {
+                        mailMessage.To.Add(to);
+                    }
                 }
-                foreach(string cc in sendMailRequestDto.CCAddresses)
+                if(sendMailRequestDto.CCAddresses != null)
                 {
-                    mailMessage.CC.Add(cc);
+                    foreach(string cc in sendMailRequestDto.CCAddresses)
+                    {
+                        mailMessage.CC.Add(cc);
+                    }
                 }
-                foreach(string bcc in sendMailRequestDto.BCCAddresses)
+                if(sendMailRequestDto.BCCAddresses != null)
                 {
-                    mailMessage.Bcc.Add(bcc);
+                    foreach(string bcc in sendMailRequestDto.BCCAddresses)
+                    {
+                        mailMessage.Bcc.Add(bcc);
+                    }
                 }
-                foreach(string reply in sendMailRequestDto.ReplyToAddresses)
+                if(sendMailRequestDto.ReplyToAddresses != null)
                 {
-                    mailMessage.ReplyToList.Add(reply);
+                    foreach(string reply in sendMailRequestDto.ReplyToAddresses)
+                    {
+                        mailMessage.ReplyToList.Add(reply);
+                    }
                 }
-                mailMessage.HeadersEncoding = encoding;
-                foreach(Header header in sendMailRequestDto.Headers)
+                if(sendMailRequestDto.Headers != null)
                 {
-                    mailMessage.Headers.Add(header.Name, header.Value);
+                    mailMessage.HeadersEncoding = encoding;
+                    foreach(Header header in sendMailRequestDto.Headers)
+                    {
+                        mailMessage.Headers.Add(header.Name, header.Value);
+                    }
                 }
                 mailMessage.SubjectEncoding = encoding;
                 mailMessage.Subject = sendMailRequestDto.Subject;
