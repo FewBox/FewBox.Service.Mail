@@ -1,4 +1,5 @@
-﻿using FewBox.Core.Web.Dto;
+﻿using System;
+using FewBox.Core.Web.Dto;
 using FewBox.Service.Mail.Configs;
 using FewBox.Service.Mail.Dtos;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ namespace FewBox.Service.Mail.Controllers
             {
                 Payload = new HealthyDto
                 {
-                    Version = this.HealthyConfig.Version
+                    Version = $"{this.HealthyConfig.Version}-{Environment.MachineName}"
                 }
             };
         }
