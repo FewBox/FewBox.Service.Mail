@@ -13,10 +13,10 @@ namespace FewBox.Service.Mail.Dtos
         public bool IsBodyHtml { get; set; }
         public string Subject { get; set; }
         public string Body { get; set; }
-        public IList<Header> Headers { get; set; }
+        public IList<HeaderDto> Headers { get; set; }
     }
 
-    public class Header
+    public class HeaderDto
     {
         public string Name { get; set; }
         public string Value { get; set; }

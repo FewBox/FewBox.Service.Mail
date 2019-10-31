@@ -48,16 +48,16 @@ namespace FewBox.Service.Mail.UnitTest
             };
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void TestSendMail()
         {
             if(this.IsEmptyPassword)
             {
-                Assert.ThrowsException<SmtpException>(()=>this.MailController.SendMail(this.SendMailRequestDto));
+                Assert.ThrowsException<SmtpException>(()=>this.MailController.Send(this.SendMailRequestDto));
             }
             else
             {
-                var response = this.MailController.SendMail(this.SendMailRequestDto);
+                var response = this.MailController.Send(this.SendMailRequestDto);
                 Assert.IsTrue(response.IsSuccessful);
             }
         }
@@ -67,11 +67,11 @@ namespace FewBox.Service.Mail.UnitTest
         {
             if(this.IsEmptyPassword)
             {
-                Assert.ThrowsException<SmtpException>(()=>this.MailController.SendMail(this.SendMailRequestDto));
+                Assert.ThrowsException<SmtpException>(()=>this.MailController.Send(this.SendMailRequestDto));
             }
             else
             {
-                var response = this.SSLMailController.SendMail(this.SendMailRequestDto);
+                var response = this.SSLMailController.Send(this.SendMailRequestDto);
                 Assert.IsTrue(response.IsSuccessful);
             }
         }
