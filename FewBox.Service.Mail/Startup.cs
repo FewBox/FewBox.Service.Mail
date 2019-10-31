@@ -111,10 +111,10 @@ namespace FewBox.Service.Mail
             // services.AddScoped<ICurrentUser<Guid>, CurrentUser<Guid>>();
             // Used for Application.
             // Used for Exception&Log AOP.
-            services.AddScoped<IExceptionHandler, ConsoleExceptionHandler>();
-            services.AddScoped<ITraceHandler, ConsoleTraceHandler>();
-            //services.AddScoped<IExceptionHandler, ServiceExceptionHandler>();
-            //services.AddScoped<ITraceHandler, ServiceTraceHandler>();
+            // services.AddScoped<IExceptionHandler, ConsoleExceptionHandler>();
+            // services.AddScoped<ITraceHandler, ConsoleTraceHandler>();
+            services.AddScoped<IExceptionHandler, ServiceExceptionHandler>();
+            services.AddScoped<ITraceHandler, ServiceTraceHandler>();
             // Used for IHttpContextAccessor&IActionContextAccessor context.
             services.AddHttpContextAccessor();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
