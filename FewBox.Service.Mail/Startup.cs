@@ -4,6 +4,7 @@ using System.Text;
 using FewBox.Core.Utility.Formatter;
 using FewBox.Core.Utility.Net;
 using FewBox.Core.Web.Config;
+using FewBox.Core.Web.Error;
 using FewBox.Core.Web.Filter;
 using FewBox.Core.Web.Security;
 using FewBox.Core.Web.Token;
@@ -82,6 +83,7 @@ namespace FewBox.Service.Mail
                 });
             services.AddMemoryCache();
             services.AddRouting(options => options.LowercaseUrls = true);
+            services.AddSingleton<IExceptionProcessorService, ExceptionProcessorService>();
             // Used for Config.
             // Used for [Authorize(Policy="JWTRole_ControllerAction")].
             var jwtConfig = this.Configuration.GetSection("JWTConfig").Get<JWTConfig>();

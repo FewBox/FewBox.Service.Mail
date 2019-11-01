@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace FewBox.Service.Mail.Configs
 {
     public class HeaderConfig
