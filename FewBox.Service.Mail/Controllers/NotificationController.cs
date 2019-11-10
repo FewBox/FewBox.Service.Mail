@@ -25,7 +25,7 @@ namespace FewBox.Service.Mail.Controllers
         {
             string subject = String.Format(this.NotificationTemplateConfig.SubjectWapper, notificationRequest.Name);
             string body = String.Format(Base64Utility.Deserialize(this.NotificationTemplateConfig.BodyWapper), notificationRequest.Param);
-            this.SendMessage(this.TemplateConfig.FromAddress, this.TemplateConfig.FromDisplayName, this.TemplateConfig.ToAddresses, this.TemplateConfig.CCAddresses, this.TemplateConfig.BCCAddresses,
+            this.SendMessage(this.TemplateConfig.FromAddress, this.TemplateConfig.FromDisplayName, notificationRequest.ToAddresses != null ? notificationRequest.ToAddresses : this.TemplateConfig.ToAddresses, this.TemplateConfig.CCAddresses, this.TemplateConfig.BCCAddresses,
             this.TemplateConfig.ReplyToAddresses, this.TemplateConfig.Headers != null ? this.TemplateConfig.Headers.Select(h => new HeaderDto { Name = h.Name, Value = h.Value }).ToList() : null, subject, body, true);
             return new NotificationResponseDto();
         }
