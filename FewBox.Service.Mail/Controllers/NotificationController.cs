@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using FewBox.Core.Utility.Formatter;
 using FewBox.Core.Web.Dto;
+using FewBox.Core.Web.Filter;
 using FewBox.Service.Mail.Configs;
 using FewBox.Service.Mail.Dtos;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,7 @@ namespace FewBox.Service.Mail.Controllers
         }
 
         [HttpPost]
+        [Trace]
         public NotificationResponseDto Send(NotificationRequestDto notificationRequest)
         {
             string subject = String.Format(this.NotificationTemplateConfig.SubjectWapper, notificationRequest.Name);
