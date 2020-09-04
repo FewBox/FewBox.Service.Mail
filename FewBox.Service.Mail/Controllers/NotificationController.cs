@@ -22,7 +22,6 @@ namespace FewBox.Service.Mail.Controllers
         }
 
         [HttpPost]
-        [Trace]
         public NotificationResponseDto Send(NotificationRequestDto notificationRequest)
         {
             string subject = String.Format(this.NotificationTemplateConfig.SubjectWapper, notificationRequest.Name);
