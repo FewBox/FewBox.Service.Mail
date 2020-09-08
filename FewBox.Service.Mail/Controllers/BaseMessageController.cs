@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FewBox.Service.Mail.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{v:apiVersion}/[controller]")]
     [ApiController]
     public abstract class BaseMessageController : ControllerBase
     {

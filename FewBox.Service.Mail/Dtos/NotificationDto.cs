@@ -1,8 +1,8 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace FewBox.Service.Mail.Dtos
 {
-    public class SendMailRequestDto
+    public class NotificationDto
     {
         public string FromAddress { get; set; }
         public string FromDisplayName { get; set; }
