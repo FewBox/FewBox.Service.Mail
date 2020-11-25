@@ -1,22 +1,23 @@
 ﻿using FewBox.Core.Web.Dto;
-using FewBox.Service.Mail.Configs;
 using FewBox.Service.Mail.Dtos;
+using FewBox.Service.Mail.Model.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace FewBox.Service.Mail.Controllers
 {
-    [ApiController]
     public class NotificationController : BaseMessageController
     {
-        public NotificationController(SmtpConfig smtpConfig) : base(smtpConfig)
+        public NotificationController(ISMTPService smtpService) : base(smtpService)
         {
         }
 
         [HttpPost]
         public MetaResponseDto Send(NotificationDto notificationDto)
         {
-            this.SendMessage(notificationDto.FromAddress, notificationDto.FromDisplayName, notificationDto.ToAddresses, notificationDto.CCAddresses, notificationDto.BCCAddresses,
-            notificationDto.ReplyToAddresses, notificationDto.Headers, notificationDto.Subject, notificationDto.Body, notificationDto.IsBodyHtml);
+            var headers = notificationDto.Headers.Select(h => new Header { Name = h.Name, Value = h.Value }).ToList();
+            this.SMTPService.SendNotification(notificationDto.FromAddress, notificationDto.FromDisplayName, notificationDto.ToAddresses, notificationDto.CCAddresses, notificationDto.BCCAddresses,
+            notificationDto.ReplyToAddresses, headers, notificationDto.Subject, notificationDto.Body, notificationDto.IsBodyHtml);
             return new MetaResponseDto();
         }
     }

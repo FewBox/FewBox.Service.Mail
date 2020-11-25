@@ -2,6 +2,16 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "build-console",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/FewBox.Service.Mail.MQ/FewBox.Service.Mail.MQ.csproj"
+            ],
+            "problemMatcher": "$tsc"
+        },
+        {
             "label": "build",
             "command": "dotnet",
             "type": "process",

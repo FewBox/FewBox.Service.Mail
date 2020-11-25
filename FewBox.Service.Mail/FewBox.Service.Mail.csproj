@@ -6,10 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FewBox.Core.Utility" Version="1.0.31" />
-    <PackageReference Include="FewBox.Core.Web" Version="1.0.90" />
+    <PackageReference Include="FewBox.Core.Web" Version="1.0.96" />
+    <PackageReference Include="FewBox.SDK" Version="0.0.5" />
     <PackageReference Include="NSwag.AspNetCore" Version="13.4.2" />
     <PackageReference Include="Sentry.AspNetCore" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FewBox.Service.Mail.Model\FewBox.Service.Mail.Model.csproj" />
+    <ProjectReference Include="..\FewBox.Service.Mail.Domain\FewBox.Service.Mail.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-namespace FewBox.Service.Mail.Configs
+namespace FewBox.Service.Mail.Model.Configs
 {
     public class SmtpConfig
     {

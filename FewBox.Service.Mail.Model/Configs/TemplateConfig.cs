@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace FewBox.Service.Mail.Configs
+namespace FewBox.Service.Mail.Model.Configs
 {
     public class TemplateConfig
     {

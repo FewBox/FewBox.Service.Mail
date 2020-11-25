@@ -1,11 +1,15 @@
-﻿using FewBox.Core.Web.Extension;
-using FewBox.Service.Mail.Configs;
+﻿using System.Collections.Generic;
+using FewBox.Core.Web.Extension;
+using FewBox.SDK.Extension;
+using FewBox.Service.Mail.Domain.Services;
+using FewBox.Service.Mail.Model.Configs;
+using FewBox.Service.Mail.Model.Services;
+using FewBox.Service.Mail.MQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using NSwag;
 using NSwag.Generation.AspNetCore;
 using NSwag.Generation.Processors.Security;
@@ -14,7 +18,7 @@ namespace FewBox.Service.Mail
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IWebHostEnvironment  hostingEnvironment)
+        public Startup(IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
         {
             this.Configuration = configuration;
             this.HostingEnvironment = hostingEnvironment;
@@ -26,13 +30,18 @@ namespace FewBox.Service.Mail
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddFewBox(FewBoxDBType.None, new ApiVersion(1, 0, "alpha1"));
+            services.AddFewBoxSDK(FewBoxIntegrationType.MessageQueue);
+            services.AddFewBox(FewBoxDBType.None, FewBoxAuthType.Payload, new ApiVersion(1, 0, "alpha1"));
             var templateConfig = this.Configuration.GetSection("TemplateConfig").Get<TemplateConfig>();
             services.AddSingleton(templateConfig);
             var notificationTemplateConfig = this.Configuration.GetSection("NotificationTemplateConfig").Get<NotificationTemplateConfig>();
             services.AddSingleton(notificationTemplateConfig);
             var smtpConfig = this.Configuration.GetSection("SmtpConfig").Get<SmtpConfig>();
             services.AddSingleton(smtpConfig);
+            services.AddScoped<ISMTPService, SMTPService>();
+            services.AddScoped<IScopedMQService, ScopedMQService>();
+            // Background MQ Service
+            services.AddHostedService<MailBackgroundService>();
             // Used for Swagger Open Api Document.
             services.AddOpenApiDocument(config =>
             {
@@ -43,36 +52,7 @@ namespace FewBox.Service.Mail
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseHttpsRedirection();
-            app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseOpenApi();
-            app.UseStaticFiles();
-            if (env.IsDevelopment())
-            {
-                app.UseCors("dev");
-                app.UseSwaggerUi3();
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseCors();
-            }
-            if (env.IsStaging())
-            {
-                app.UseSwaggerUi3();
-                app.UseDeveloperExceptionPage();
-            }
-            if (env.IsProduction())
-            {
-                app.UseReDoc(c => c.DocumentPath = "/swagger/v1/swagger.json");
-                app.UseHsts();
-            }
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseFewBox(new List<string> { "/swagger/v1/swagger.json" });
         }
 
         private void InitAspNetCoreOpenApiDocumentGeneratorSettings(AspNetCoreOpenApiDocumentGeneratorSettings config, string documentName, string[] apiGroupNames, string documentVersion)
