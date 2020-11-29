@@ -1,28 +1,26 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+using FewBox.SDK.Core;
 using FewBox.SDK.Mail;
 using FewBox.Service.Mail.Model.Services;
 
 namespace FewBox.Service.Mail.Domain.Services
 {
-    public class ScopedMQService : IScopedMQService
+    public class MQMailHandler : IMQMailHandler
     {
-        private IMailService MailService { get; }
         private ISMTPService SMTPService { get; }
 
-        public ScopedMQService(IMailService mailService, ISMTPService smtpService)
+        public MQMailHandler(ISMTPService smtpService)
         {
-            this.MailService = mailService;
             this.SMTPService = smtpService;
         }
 
-        public void Process()
+        public Func<EmailMessage, bool> Handle()
         {
-            this.MailService.ReceiveOpsNotification((mailMessage) =>
+            return (mailMessage) =>
             {
                 this.SMTPService.SendOpsNotification(mailMessage.Name, mailMessage.Content, mailMessage.ToAddresses);
-            });
+                return true;
+            };
         }
     }
 }

@@ -1,4 +1,5 @@
 using FewBox.SDK.Extension;
+using FewBox.SDK.Mail;
 using FewBox.Service.Mail.Domain.Services;
 using FewBox.Service.Mail.Model.Configs;
 using FewBox.Service.Mail.Model.Services;
@@ -21,7 +22,7 @@ namespace FewBox.Service.Mail.MQ
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddFewBoxSDK(FewBoxIntegrationType.MessageQueue);
+            services.AddFewBoxSDK(FewBoxIntegrationType.MessageQueue, FewBoxListenerHostType.Console);
             var templateConfig = this.Configuration.GetSection("TemplateConfig").Get<TemplateConfig>();
             services.AddSingleton(templateConfig);
             var notificationTemplateConfig = this.Configuration.GetSection("NotificationTemplateConfig").Get<NotificationTemplateConfig>();
@@ -30,7 +31,7 @@ namespace FewBox.Service.Mail.MQ
             services.AddSingleton(smtpConfig);
             services.AddLogging();
             services.AddScoped<ISMTPService, SMTPService>();
-            services.AddScoped<IScopedMQService, ScopedMQService>();
+            services.AddScoped<IMQMailHandler, MQMailHandler>();
         }
     }
 }

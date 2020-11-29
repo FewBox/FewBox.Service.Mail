@@ -1,4 +1,6 @@
 ﻿using System;
+using FewBox.SDK.Core;
+using FewBox.SDK.Mail;
 using FewBox.Service.Mail.Model.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -17,10 +19,14 @@ namespace FewBox.Service.Mail.MQ
             logger.LogInformation("Wellcome to use FewBox Mail MQ!");
 
             // Get Service and call method
-            var mqService = serviceProvider.GetService<IScopedMQService>();
-            mqService.Process();
-            logger.LogInformation("Press any key to exit!");
-            Console.ReadKey();
+            var mqListenerService = serviceProvider.GetService<IMQListenerService<EmailMessage>>();
+            var mqMailHandler = serviceProvider.GetService<IMQMailHandler>();
+            using (mqListenerService)
+            {
+                mqListenerService.Start(QueueNames.Mail, mqMailHandler.Handle());
+                logger.LogInformation("Press any key to exit!");
+                Console.ReadLine();
+            }
         }
     }
 }

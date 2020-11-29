@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using FewBox.Core.Web.Extension;
 using FewBox.SDK.Extension;
+using FewBox.SDK.Mail;
 using FewBox.Service.Mail.Domain.Services;
 using FewBox.Service.Mail.Model.Configs;
 using FewBox.Service.Mail.Model.Services;
-using FewBox.Service.Mail.MQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +30,7 @@ namespace FewBox.Service.Mail
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddFewBoxSDK(FewBoxIntegrationType.MessageQueue);
+            services.AddFewBoxSDK(FewBoxIntegrationType.MessageQueue, FewBoxListenerHostType.Web);
             services.AddFewBox(FewBoxDBType.None, FewBoxAuthType.Payload, new ApiVersion(1, 0, "alpha1"));
             var templateConfig = this.Configuration.GetSection("TemplateConfig").Get<TemplateConfig>();
             services.AddSingleton(templateConfig);
@@ -38,10 +38,8 @@ namespace FewBox.Service.Mail
             services.AddSingleton(notificationTemplateConfig);
             var smtpConfig = this.Configuration.GetSection("SmtpConfig").Get<SmtpConfig>();
             services.AddSingleton(smtpConfig);
-            services.AddScoped<ISMTPService, SMTPService>();
-            services.AddScoped<IScopedMQService, ScopedMQService>();
-            // Background MQ Service
-            services.AddHostedService<MailBackgroundService>();
+            services.AddSingleton<ISMTPService, SMTPService>();
+            services.AddSingleton<IMQMailHandler, MQMailHandler>();
             // Used for Swagger Open Api Document.
             services.AddOpenApiDocument(config =>
             {
