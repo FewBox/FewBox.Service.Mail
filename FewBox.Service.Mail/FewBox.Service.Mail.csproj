@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="FewBox.Core.Web" Version="1.0.96" />
-    <PackageReference Include="FewBox.SDK" Version="0.0.13" />
+    <PackageReference Include="FewBox.SDK" Version="0.0.16" />
     <PackageReference Include="NSwag.AspNetCore" Version="13.4.2" />
     <PackageReference Include="Sentry.AspNetCore" Version="2.1.1" />
   </ItemGroup>

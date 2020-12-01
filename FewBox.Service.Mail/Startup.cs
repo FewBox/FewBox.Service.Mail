@@ -38,8 +38,8 @@ namespace FewBox.Service.Mail
             services.AddSingleton(notificationTemplateConfig);
             var smtpConfig = this.Configuration.GetSection("SmtpConfig").Get<SmtpConfig>();
             services.AddSingleton(smtpConfig);
-            services.AddSingleton<ISMTPService, SMTPService>();
-            services.AddSingleton<IMQMailHandler, MQMailHandler>();
+            services.AddScoped<ISMTPService, SMTPService>();
+            services.AddScoped<IMQMailHandler, MQMailHandler>();
             // Used for Swagger Open Api Document.
             services.AddOpenApiDocument(config =>
             {
