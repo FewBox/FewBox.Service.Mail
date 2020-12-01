@@ -30,7 +30,7 @@ namespace FewBox.Service.Mail
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddFewBoxSDK(FewBoxIntegrationType.MessageQueue, FewBoxListenerHostType.Web);
+            services.AddFewBoxSDK(FewBoxIntegrationType.MessageQueue, FewBoxListenerHostType.Web, FewBoxListenerType.Email);
             services.AddFewBox(FewBoxDBType.None, FewBoxAuthType.Payload, new ApiVersion(1, 0, "alpha1"));
             var templateConfig = this.Configuration.GetSection("TemplateConfig").Get<TemplateConfig>();
             services.AddSingleton(templateConfig);
