@@ -7,6 +7,7 @@ using System.Net.Mail;
 using System.Text;
 using System;
 using FewBox.Core.Utility.Formatter;
+using Microsoft.Extensions.Logging;
 
 namespace FewBox.Service.Mail.Domain.Services
 {
@@ -15,11 +16,13 @@ namespace FewBox.Service.Mail.Domain.Services
         private SmtpConfig SmtpConfig { get; set; }
         private TemplateConfig TemplateConfig { get; set; }
         private NotificationTemplateConfig NotificationTemplateConfig { get; set; }
-        public SMTPService(SmtpConfig smtpConfig, TemplateConfig templateConfig, NotificationTemplateConfig notificationTemplateConfig)
+        private ILogger Logger { get; set; }
+        public SMTPService(SmtpConfig smtpConfig, TemplateConfig templateConfig, NotificationTemplateConfig notificationTemplateConfig, ILogger<SMTPService> logger)
         {
             this.SmtpConfig = smtpConfig;
             this.TemplateConfig = templateConfig;
             this.NotificationTemplateConfig = notificationTemplateConfig;
+            this.Logger = logger;
         }
 
         public void SendNotification(string fromAddress, string fromDisplayName, IList<string> toAddresses, IList<string> ccAddresses, IList<string> bccAddresses,
@@ -27,6 +30,7 @@ namespace FewBox.Service.Mail.Domain.Services
         {
             using (SmtpClient smtpClient = new SmtpClient())
             {
+                this.Logger.LogDebug("Smtp Config: {0}", JsonUtility.Serialize<SmtpConfig>(this.SmtpConfig));
                 var encoding = Encoding.UTF8;
                 smtpClient.UseDefaultCredentials = false;
                 smtpClient.Host = this.SmtpConfig.Host;
@@ -83,15 +87,23 @@ namespace FewBox.Service.Mail.Domain.Services
                 mailMessage.Body = body;
                 mailMessage.IsBodyHtml = isBodyHtml;
                 smtpClient.Send(mailMessage);
+                this.Logger.LogDebug("Send email finished!");
             }
         }
 
         public void SendOpsNotification(string name, string content, IList<string> toAddresses = null)
         {
-            string subject = String.Format(this.NotificationTemplateConfig.SubjectWapper, name);
-            string body = String.Format(Base64Utility.Deserialize(this.NotificationTemplateConfig.BodyWapper), content);
-            this.SendNotification(this.TemplateConfig.FromAddress, this.TemplateConfig.FromDisplayName, toAddresses != null ? toAddresses : this.TemplateConfig.ToAddresses, this.TemplateConfig.CCAddresses, this.TemplateConfig.BCCAddresses,
-            this.TemplateConfig.ReplyToAddresses, this.TemplateConfig.Headers != null ? this.TemplateConfig.Headers.Select(h => new Header { Name = h.Name, Value = h.Value }).ToList() : null, subject, body, true);
+            try
+            {
+                string subject = String.Format(this.NotificationTemplateConfig.SubjectWapper, name);
+                string body = String.Format(Base64Utility.Deserialize(this.NotificationTemplateConfig.BodyWapper), content);
+                this.SendNotification(this.TemplateConfig.FromAddress, this.TemplateConfig.FromDisplayName, toAddresses != null ? toAddresses : this.TemplateConfig.ToAddresses, this.TemplateConfig.CCAddresses, this.TemplateConfig.BCCAddresses,
+                this.TemplateConfig.ReplyToAddresses, this.TemplateConfig.Headers != null ? this.TemplateConfig.Headers.Select(h => new Header { Name = h.Name, Value = h.Value }).ToList() : null, subject, body, true);
+            }
+            catch (Exception exception)
+            {
+                this.Logger.LogError(exception, exception.Message);
+            }
         }
     }
 }
