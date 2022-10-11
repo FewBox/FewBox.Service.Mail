@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="FewBox.Core.Utility" Version="1.0.32" />
-    <PackageReference Include="FewBox.SDK" Version="0.0.18" />
+    <PackageReference Include="FewBox.SDK" Version="0.0.19" />
   </ItemGroup>
 
   <PropertyGroup>
