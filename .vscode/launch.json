@@ -9,7 +9,7 @@
            "type": "coreclr",
            "request": "launch",
            "preLaunchTask": "build-console",
-           "program": "${workspaceFolder}/FewBox.Service.Mail.MQ/bin/Debug/netcoreapp5.0/FewBox.Service.Mail.MQ.dll",
+           "program": "${workspaceFolder}/FewBox.Service.Mail.MQ/bin/Debug/netcoreapp6.0/FewBox.Service.Mail.MQ.dll",
            "args": [],
            "cwd": "${workspaceFolder}",
            "stopAtEntry": false,
@@ -21,7 +21,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/FewBox.Service.Mail/bin/Debug/netcoreapp5.0/FewBox.Service.Mail.dll",
+            "program": "${workspaceFolder}/FewBox.Service.Mail/bin/Debug/netcoreapp6.0/FewBox.Service.Mail.dll",
             "args": [],
             "cwd": "${workspaceFolder}/FewBox.Service.Mail",
             "stopAtEntry": false,
