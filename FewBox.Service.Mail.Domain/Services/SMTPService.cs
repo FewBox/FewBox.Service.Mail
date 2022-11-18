@@ -13,15 +13,11 @@ namespace FewBox.Service.Mail.Domain.Services
 {
     public class SMTPService : ISMTPService
     {
-        private SmtpConfig SmtpConfig { get; set; }
-        private TemplateConfig TemplateConfig { get; set; }
-        private NotificationTemplateConfig NotificationTemplateConfig { get; set; }
+        private Email Email { get; set; }
         private ILogger Logger { get; set; }
-        public SMTPService(SmtpConfig smtpConfig, TemplateConfig templateConfig, NotificationTemplateConfig notificationTemplateConfig, ILogger<SMTPService> logger)
+        public SMTPService(Smtp smtpConfig, Email email, ILogger<SMTPService> logger)
         {
-            this.SmtpConfig = smtpConfig;
-            this.TemplateConfig = templateConfig;
-            this.NotificationTemplateConfig = notificationTemplateConfig;
+            this.Email = email;
             this.Logger = logger;
         }
 
@@ -30,17 +26,17 @@ namespace FewBox.Service.Mail.Domain.Services
         {
             using (SmtpClient smtpClient = new SmtpClient())
             {
-                this.Logger.LogDebug("Smtp Config: {0}", JsonUtility.Serialize<SmtpConfig>(this.SmtpConfig));
+                this.Logger.LogDebug("Smtp Config: {0}", JsonUtility.Serialize<Smtp>(this.Email.Smtp));
                 var encoding = Encoding.UTF8;
                 smtpClient.UseDefaultCredentials = false;
-                smtpClient.Host = this.SmtpConfig.Host;
-                smtpClient.Port = this.SmtpConfig.Port;
-                smtpClient.Timeout = this.SmtpConfig.Timeout;
-                smtpClient.EnableSsl = this.SmtpConfig.EnableSsl;
+                smtpClient.Host = this.Email.Smtp.Host;
+                smtpClient.Port = this.Email.Smtp.Port;
+                smtpClient.Timeout = this.Email.Smtp.Timeout;
+                smtpClient.EnableSsl = this.Email.Smtp.EnableSsl;
                 smtpClient.Credentials = new NetworkCredential
                 {
-                    UserName = this.SmtpConfig.Username,
-                    Password = this.SmtpConfig.Password
+                    UserName = this.Email.Smtp.Username,
+                    Password = this.Email.Smtp.Password
                 };
 
                 var mailMessage = new MailMessage();
@@ -95,10 +91,10 @@ namespace FewBox.Service.Mail.Domain.Services
         {
             try
             {
-                string subject = String.Format(this.NotificationTemplateConfig.SubjectWapper, name);
-                string body = String.Format(Base64Utility.Deserialize(this.NotificationTemplateConfig.BodyWapper), content);
-                this.SendNotification(this.TemplateConfig.FromAddress, this.TemplateConfig.FromDisplayName, toAddresses != null ? toAddresses : this.TemplateConfig.ToAddresses, this.TemplateConfig.CCAddresses, this.TemplateConfig.BCCAddresses,
-                this.TemplateConfig.ReplyToAddresses, this.TemplateConfig.Headers != null ? this.TemplateConfig.Headers.Select(h => new Header { Name = h.Name, Value = h.Value }).ToList() : null, subject, body, true);
+                string subject = String.Format(this.Email.Template.SubjectWapper, name);
+                string body = String.Format(Base64Utility.Deserialize(this.Email.Template.BodyWapper), content);
+                this.SendNotification(this.Email.FromAddress, this.Email.FromDisplayName, toAddresses != null ? toAddresses : this.Email.ToAddresses, this.Email.CCAddresses, this.Email.BCCAddresses,
+                this.Email.ReplyToAddresses, this.Email.Headers != null ? this.Email.Headers.Select(h => new Header { Name = h.Name, Value = h.Value }).ToList() : null, subject, body, true);
             }
             catch (Exception exception)
             {

@@ -23,12 +23,8 @@ namespace FewBox.Service.Mail.MQ
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddFewBoxSDK(FewBoxIntegrationType.MessageQueue, FewBoxListenerHostType.Console, FewBoxListenerType.Email);
-            var templateConfig = this.Configuration.GetSection("TemplateConfig").Get<TemplateConfig>();
-            services.AddSingleton(templateConfig);
-            var notificationTemplateConfig = this.Configuration.GetSection("NotificationTemplateConfig").Get<NotificationTemplateConfig>();
-            services.AddSingleton(notificationTemplateConfig);
-            var smtpConfig = this.Configuration.GetSection("SmtpConfig").Get<SmtpConfig>();
-            services.AddSingleton(smtpConfig);
+            var email = this.Configuration.GetSection("Email").Get<Email>();
+            services.AddSingleton(email);
             services.AddLogging();
             services.AddScoped<ISMTPService, SMTPService>();
             services.AddScoped<IMQMailHandler, MQMailHandler>();

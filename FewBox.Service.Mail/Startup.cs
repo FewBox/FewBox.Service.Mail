@@ -45,12 +45,8 @@ namespace FewBox.Service.Mail
         {
             services.AddFewBoxSDK(FewBoxIntegrationType.MessageQueue, FewBoxListenerHostType.Web, FewBoxListenerType.Email);
             services.AddFewBox(this.ApiVersionDocuments, FewBoxDBType.None, FewBoxAuthType.Payload);
-            var templateConfig = this.Configuration.GetSection("TemplateConfig").Get<TemplateConfig>();
-            services.AddSingleton(templateConfig);
-            var notificationTemplateConfig = this.Configuration.GetSection("NotificationTemplateConfig").Get<NotificationTemplateConfig>();
-            services.AddSingleton(notificationTemplateConfig);
-            var smtpConfig = this.Configuration.GetSection("SmtpConfig").Get<SmtpConfig>();
-            services.AddSingleton(smtpConfig);
+            var email = this.Configuration.GetSection("Email").Get<Email>();
+            services.AddSingleton(email);
             services.AddScoped<ISMTPService, SMTPService>();
             services.AddScoped<IMQMailHandler, MQMailHandler>();
         }
