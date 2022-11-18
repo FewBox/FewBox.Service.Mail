@@ -22,7 +22,7 @@ namespace FewBox.Service.Mail.Domain.Services
         }
 
         public void SendNotification(string fromAddress, string fromDisplayName, IList<string> toAddresses, IList<string> ccAddresses, IList<string> bccAddresses,
-        IList<string> replyToAddresses, IList<Header> headers, string subject, string body, bool isBodyHtml)
+        IList<string> replyToAddresses, IList<Model.Services.Header> headers, string subject, string body, bool isBodyHtml)
         {
             using (SmtpClient smtpClient = new SmtpClient())
             {
@@ -72,7 +72,7 @@ namespace FewBox.Service.Mail.Domain.Services
                 if (headers != null)
                 {
                     mailMessage.HeadersEncoding = encoding;
-                    foreach (Header header in headers)
+                    foreach (Model.Services.Header header in headers)
                     {
                         mailMessage.Headers.Add(header.Name, header.Value);
                     }

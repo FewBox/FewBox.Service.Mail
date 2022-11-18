@@ -1,6 +1,6 @@
 namespace FewBox.Service.Mail.Model.Configs
 {
-    public class HeaderConfig
+    public class EmailHeader
     {
         public string Name { get; set; }
         public string Value { get; set; }

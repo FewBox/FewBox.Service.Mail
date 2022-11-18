@@ -10,7 +10,7 @@ namespace FewBox.Service.Mail.Model.Configs
         public IList<string> CCAddresses { get; set; }
         public IList<string> BCCAddresses { get; set; }
         public IList<string> ReplyToAddresses { get; set; }
-        public IList<HeaderConfig> Headers { get; set; }
+        public IList<EmailHeader> Headers { get; set; }
         public Template Template { get; set; }
         public Smtp Smtp { get; set; }
     }
