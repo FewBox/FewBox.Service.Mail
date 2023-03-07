@@ -1,7 +1,6 @@
 ﻿using System;
 using FewBox.SDK.Core;
 using FewBox.SDK.Mail;
-using FewBox.Service.Mail.Model.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -19,7 +18,7 @@ namespace FewBox.Service.Mail.MQ
             logger.LogInformation("Wellcome to use FewBox Mail MQ!");
 
             // Get Service and call method
-            var mqListenerService = serviceProvider.GetService<IMQListenerService<EmailMessage>>();
+            var mqListenerService = serviceProvider.GetService<IMQConsumerService<EmailMessage>>();
             var mqMailHandler = serviceProvider.GetService<IMQMailHandler>();
             using (mqListenerService)
             {
