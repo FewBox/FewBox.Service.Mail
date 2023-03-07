@@ -1,5 +1,4 @@
 ﻿using System;
-using FewBox.SDK.Core;
 using FewBox.SDK.Mail;
 using FewBox.Service.Mail.Model.Services;
 
