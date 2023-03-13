@@ -1,7 +1,6 @@
 ﻿using System;
-using FewBox.SDK.Core;
-using FewBox.SDK.Mail;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace FewBox.Service.Mail.MQ
@@ -10,22 +9,21 @@ namespace FewBox.Service.Mail.MQ
     {
         static void Main(string[] args)
         {
-            IServiceCollection services = new ServiceCollection();
-            Startup startup = new Startup();
-            startup.ConfigureServices(services);
+            IServiceCollection services = new ServiceCollection().AddLogging();
             IServiceProvider serviceProvider = services.BuildServiceProvider();
             var logger = serviceProvider.GetService<ILoggerFactory>().CreateLogger<Program>();
             logger.LogInformation("Wellcome to use FewBox Mail MQ!");
+            CreateHostBuilder(args).Build().Run();
+        }
 
-            // Get Service and call method
-            var mqListenerService = serviceProvider.GetService<IMQConsumerService<EmailMessage>>();
-            var mqMailHandler = serviceProvider.GetService<IMQMailHandler>();
-            using (mqListenerService)
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return new HostBuilder()
+            .ConfigureServices((hostContext, services) =>
             {
-                mqListenerService.Start(QueueNames.Mail, mqMailHandler.Handle());
-                logger.LogInformation("Press any key to exit!");
-                Console.ReadLine();
-            }
+                Startup startup = new Startup();
+                startup.ConfigureServices(services);
+            });
         }
     }
 }

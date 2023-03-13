@@ -15,7 +15,7 @@ namespace FewBox.Service.Mail.Domain.Services
     {
         private Email Email { get; set; }
         private ILogger Logger { get; set; }
-        public SMTPService(Smtp smtpConfig, Email email, ILogger<SMTPService> logger)
+        public SMTPService(Email email, ILogger<SMTPService> logger)
         {
             this.Email = email;
             this.Logger = logger;

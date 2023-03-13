@@ -22,12 +22,12 @@ namespace FewBox.Service.Mail.MQ
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddFewBoxSDKConsole(MQConsumerType.Email);
+            services.AddFewBoxSDK(MQConsumerType.Email);
             var email = this.Configuration.GetSection("Email").Get<Email>();
             services.AddSingleton(email);
             services.AddLogging();
-            services.AddScoped<ISMTPService, SMTPService>();
-            services.AddScoped<IMQMailHandler, MQMailHandler>();
+            services.AddSingleton<ISMTPService, SMTPService>();
+            services.AddSingleton<IMQMailHandler, MQMailHandler>();
         }
     }
 }

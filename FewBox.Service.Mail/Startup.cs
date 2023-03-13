@@ -40,12 +40,12 @@ namespace FewBox.Service.Mail
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddFewBoxSDKWeb(MQConsumerType.Email);
+            services.AddFewBoxSDK(MQConsumerType.Email);
             services.AddFewBox(this.ApiVersionDocuments, FewBoxDBType.None, FewBoxAuthType.Payload);
             var email = this.Configuration.GetSection("Email").Get<Email>();
             services.AddSingleton(email);
-            services.AddScoped<ISMTPService, SMTPService>();
-            services.AddScoped<IMQMailHandler, MQMailHandler>();
+            services.AddSingleton<ISMTPService, SMTPService>();
+            services.AddSingleton<IMQMailHandler, MQMailHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
