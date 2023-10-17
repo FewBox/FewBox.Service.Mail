@@ -1,7 +1,7 @@
 echo 'Build Email...'
 DOCKER_REPO_SLUG=fewbox/mail PROJECTNAME=FewBox.Service.Mail PROJECTUNITTESTNAME=$PROJECTNAME.UnitTest
 DOCKER_REPO_VERSION=v1
-DOCKER_REPO_IP=192.168.1.38
+DOCKER_REPO_IP=registry.fewbox.lan
 DOCKER_REPO_PORT=5000
 dotnet restore $PROJECTNAME
 dotnet publish -c Release $PROJECTNAME/$PROJECTNAME.csproj
